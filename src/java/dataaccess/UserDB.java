@@ -84,7 +84,7 @@ public class UserDB {
         ConnectionPool cp= ConnectionPool.getInstance();
         Connection connection = cp.getConnection();
         User user;
-        String searchById = "SELECT * FROM USERS"
+        String searchById = "SELECT * FROM USERS "
                 + "WHERE ID = ?";
         PreparedStatement ps = connection.prepareStatement(searchById);
         ps.setInt(1, id);
