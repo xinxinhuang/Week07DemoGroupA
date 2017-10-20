@@ -6,23 +6,39 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserDB {
+    private static String username="root";
+    private static String password="password";
+    private static String dbURL="jdbc:mysql://localhost:3306/";
+    private Connection connection=null;
+    
+    public UserDB()
+    {
+        try {
+            Connection connection = DriverManager.getConnection(
+                    dbURL, username, password);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-    public int insert(User user) throws NotesDBException {
+    }
+    public int insert(User user) throws NotesDBException, SQLException {
         
         String query = "UPDATE Users SET " +
         "id = '" + user.getId() + "', " +
         "firstname = '" + user.getFirstname()+ "', " +
          "lastname = '" + user.getLastname()+ "', " + 
                 "email = '" + user.getEmail()+ "', " +
-                 "password = '" + user.getPassword+ "', " +
+                 "password = '" + user.getPassword()+ "', " +
                  "SIN = '" + user.getSIN()+ "', " ;
                
         Statement statement = connection.createStatement();
         int rowCount = statement.executeUpdate(query);
-
-        return 0;
+        
+        return rowCount;
     }
 
     public int update(User user) throws NotesDBException {
