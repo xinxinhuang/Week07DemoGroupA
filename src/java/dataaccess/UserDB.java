@@ -1,11 +1,27 @@
 package dataaccess;
 
 import domainmodel.User;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class UserDB {
 
     public int insert(User user) throws NotesDBException {
+        
+        String query = "UPDATE Users SET " +
+        "id = '" + user.getId() + "', " +
+        "firstname = '" + user.getFirstname()+ "', " +
+         "lastname = '" + user.getLastname()+ "', " + 
+                "email = '" + user.getEmail()+ "', " +
+                 "password = '" + user.getPassword+ "', " +
+                 "SIN = '" + user.getSIN()+ "', " ;
+               
+        Statement statement = connection.createStatement();
+        int rowCount = statement.executeUpdate(query);
+
         return 0;
     }
 
@@ -21,6 +37,10 @@ public class UserDB {
         return null;
     }
 
+    public User getUserById(int id) throws NotesDBException {
+        return null;
+    }
+    
     public int delete(User user) throws NotesDBException {
         return 0;
     }
