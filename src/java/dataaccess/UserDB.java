@@ -13,34 +13,21 @@ import java.util.logging.Logger;
 
 public class UserDB {
 
-    private static String username = "root";
-    private static String password = "password";
-    private static String dbURL = "jdbc:mysql://localhost:3306/";
-    private Connection connection = null;
-
-    public UserDB() {
-        try {
-            Connection connection = DriverManager.getConnection(
-                    dbURL, username, password);
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
     public int insert(User user) throws NotesDBException, SQLException {
-
-        String query = "UPDATE Users SET "
-                + "id = '" + user.getId() + "', "
-                + "firstname = '" + user.getFirstname() + "', "
-                + "lastname = '" + user.getLastname() + "', "
-                + "email = '" + user.getEmail() + "', "
-                + "password = '" + user.getPassword() + "', "
-                + "SIN = '" + user.getSIN() + "', ";
-
+       ConnectionPool cp= ConnectionPool.getInstance();
+       Connection connection = cp.getConnection();
+        String query = "UPDATE Users SET " +
+        "id = '" + user.getId() + "', " +
+        "firstname = '" + user.getFirstname()+ "', " +
+         "lastname = '" + user.getLastname()+ "', " + 
+                "email = '" + user.getEmail()+ "', " +
+                 "password = '" + user.getPassword()+ "', " +
+                 "SIN = '" + user.getSIN()+ "', " ;
+               
         Statement statement = connection.createStatement();
+        
         int rowCount = statement.executeUpdate(query);
-
+        cp.freeConnection(connection);
         return rowCount;
     }
 
@@ -57,6 +44,8 @@ public class UserDB {
     }
 
     public User getUserById(int id) throws NotesDBException, SQLException {
+        ConnectionPool cp= ConnectionPool.getInstance();
+        Connection connection = cp.getConnection();
         User user;
         String searchById = "SELECT * FROM USERS"
                 + "WHERE ID = ?";
@@ -68,6 +57,8 @@ public class UserDB {
     }
 
     public int delete(User user) throws NotesDBException, SQLException {
+        ConnectionPool cp= ConnectionPool.getInstance();
+       Connection connection = cp.getConnection();
         String deleteQuery = "DELETE FROM USERS "
                 + "WHERE ID = ?";
         PreparedStatement ps = connection.prepareStatement(deleteQuery);
