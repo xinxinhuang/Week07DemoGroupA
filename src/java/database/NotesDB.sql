@@ -1,6 +1,7 @@
 DROP DATABASE if exists NotesDB;
 CREATE DATABASE NotesDB;
 
+USE NotesDB;
 
 CREATE TABLE Users(
 id NUMBER PRIMARY KEY, 
@@ -15,5 +16,3 @@ ALTER TABLE USERS
 ADD CONSTRAINT SYS_USERS_SIN_CK CHECK (sin Like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'); 
 
 commit;
-
-USE NotesDB;
