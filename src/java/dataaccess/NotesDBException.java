@@ -19,7 +19,7 @@ public class NotesDBException extends Exception {
 
     /**
      * Constructor who takes a string containing a custom error message
-     * @param message the custom error message repesenting the error that was thrown
+     * @param message the custom error message representing the error that was thrown
      */
     public NotesDBException(String message) {
 
