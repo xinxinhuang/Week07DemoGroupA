@@ -2,8 +2,11 @@ package dataaccess;
 
 import domainmodel.User;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -74,15 +77,53 @@ public class UserDB {
         return null;
     }
 
-    public User getUser(String username) throws NotesDBException {
+ /**
+     * An accessor method to retrieve a User object from the database with a
+     * specified email address
+     * 
+     * @param email email address of the user to use for search
+     * @return the User object with the specified email
+     * @throws NotesDBException throws when the SQL query is not executed 
+     * successfully
+     */
+    public User getUser(String email) throws NotesDBException {
+        String preparedSQL = "SELECT id, firstname, lastname" 
+                   + "email, password, sin"
+                   + "FROM users WHERE email = ?";
+        try {
+        ConnectionPool cp= ConnectionPool.getInstance();
+        Connection connection = cp.getConnection();
+        PreparedStatement ps = connection.prepareStatement(preparedSQL);
+            ps.setString(1, email);
+            ResultSet user = ps.executeQuery();
+            cp.freeConnection(connection);
+            return (User)user;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
-    public User getUserById(int id) throws NotesDBException {
-        return null;
+    public User getUserById(int id) throws NotesDBException, SQLException {
+        ConnectionPool cp= ConnectionPool.getInstance();
+        Connection connection = cp.getConnection();
+        User user;
+        String searchById = "SELECT * FROM USERS"
+                + "WHERE ID = ?";
+        PreparedStatement ps = connection.prepareStatement(searchById);
+        ps.setInt(1, id);
+        ResultSet user1 = ps.executeQuery();
+        user = (User) user1;
+        return user;
     }
-
-    public int delete(User user) throws NotesDBException {
-        return 0;
+   public int delete(User user) throws NotesDBException, SQLException {
+        ConnectionPool cp= ConnectionPool.getInstance();
+       Connection connection = cp.getConnection();
+        String deleteQuery = "DELETE FROM USERS "
+                + "WHERE ID = ?";
+        PreparedStatement ps = connection.prepareStatement(deleteQuery);
+        ps.setInt(1, user.getId());
+        int rowAffected = ps.executeUpdate();
+        return rowAffected;
     }
 }
