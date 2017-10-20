@@ -118,6 +118,7 @@ public class UserDB {
         ps.setInt(1, id);
         ResultSet user1 = ps.executeQuery();
         user = (User) user1;
+        cp.freeConnection(connection);
         return user;
     }
    public int delete(User user) throws NotesDBException, SQLException {
@@ -128,6 +129,7 @@ public class UserDB {
         PreparedStatement ps = connection.prepareStatement(deleteQuery);
         ps.setInt(1, user.getId());
         int rowAffected = ps.executeUpdate();
+        cp.freeConnection(connection);
         return rowAffected;
     }
 }
