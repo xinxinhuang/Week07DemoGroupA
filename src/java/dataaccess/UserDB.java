@@ -73,8 +73,38 @@ public class UserDB {
 
     }
 
-    public List<User> getAll() throws NotesDBException {
-        return null;
+    public List<User> getAll() throws NotesDBException, SQLException {
+        List<User> userList = null;
+        
+        int id;
+        String firstname;
+        String lastname;
+        String email;
+        String password;
+        int sin;
+        
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        
+        String preparedSql="SELECT * FROM Users";
+        PreparedStatement ps =connection.prepareStatement(preparedSql);
+        
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+           
+            id=Integer.parseInt(rs.getString("id"));
+            firstname=rs.getString("firstname");
+            lastname=rs.getString("lastname");
+            email=rs.getString("email");
+            password=rs.getString("password");
+            sin=rs.getInt("SIN");
+            User u = new User(id,firstname,lastname,email,password,sin);
+           
+            userList.add(u);
+        }
+        pool.freeConnection(connection);
+        return userList;
+        
     }
 
  /**
