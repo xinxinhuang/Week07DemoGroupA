@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -76,7 +77,30 @@ public class UserDB {
         return null;
     }
 
-    public User getUser(String username) throws NotesDBException {
+ /**
+     * An accessor method to retrieve a User object from the database with a
+     * specified email address
+     * 
+     * @param email email address of the user to use for search
+     * @return the User object with the specified email
+     * @throws NotesDBException throws when the SQL query is not executed 
+     * successfully
+     */
+    public User getUser(String email) throws NotesDBException {
+        String preparedSQL = "SELECT id, firstname, lastname" 
+                   + "email, password, sin"
+                   + "FROM users WHERE email = ?";
+        try {
+        ConnectionPool cp= ConnectionPool.getInstance();
+        Connection connection = cp.getConnection();
+        PreparedStatement ps = connection.prepareStatement(preparedSQL);
+            ps.setString(1, email);
+            ResultSet user = ps.executeQuery();
+            cp.freeConnection(connection);
+            return (User)user;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
