@@ -14,36 +14,10 @@ public class UserService {
     }
 
     public List<User> getAll() throws NotesDBException, SQLException {
-        List<User> userList = null;
-        
-        int id;
-        String firstname;
-        String lastname;
-        String email;
-        String password;
-        String sin;
-        
-        String preparedSql="SELECT * FROM Users";
-        PreparedStatement ps =connection.prepareStatement(preparedSql);
-        
-        ResultSet rs = ps.executeQuery();
-        while(rs.next()){
-           
-            id=Integer.parseInt(rs.getString("id"));
-            firstname=rs.getString("firstname");
-            lastname=rs.getString("lastname");
-            email=rs.getString("email");
-            password=rs.getString("password");
-            sin=rs.getString("SIN");
-            User u = new User(id,firstname,lastname,email,password,sin);
-           
-            userList.add(u);
-        }
-        
-        return userList;
+        return null;
     }
 
-    public int update(String username, String password, ... [more parameters]) throws Exception {
+    public int update(User user) throws Exception {
         return 0;
     }
 
@@ -51,7 +25,7 @@ public class UserService {
         return 0;
     }
 
-    public int insert(String username, String password, ... [more parameters]) throws Exception {
+    public int insert(User user) throws Exception {
         return 0;
     }
 

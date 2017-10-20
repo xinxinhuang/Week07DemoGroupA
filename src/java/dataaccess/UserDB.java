@@ -73,8 +73,38 @@ public class UserDB {
 
     }
 
-    public List<User> getAll() throws NotesDBException {
-        return null;
+    public List<User> getAll() throws NotesDBException, SQLException {
+        List<User> userList = null;
+        
+        int id;
+        String firstname;
+        String lastname;
+        String email;
+        String password;
+        int sin;
+        
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        
+        String preparedSql="SELECT * FROM Users";
+        PreparedStatement ps =connection.prepareStatement(preparedSql);
+        
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+           
+            id=Integer.parseInt(rs.getString("id"));
+            firstname=rs.getString("firstname");
+            lastname=rs.getString("lastname");
+            email=rs.getString("email");
+            password=rs.getString("password");
+            sin=rs.getInt("SIN");
+            User u = new User(id,firstname,lastname,email,password,sin);
+           
+            userList.add(u);
+        }
+        pool.freeConnection(connection);
+        return userList;
+        
     }
 
  /**
@@ -86,19 +116,23 @@ public class UserDB {
      * @throws NotesDBException throws when the SQL query is not executed 
      * successfully
      */
-    public User getUser(String email) throws NotesDBException {
-        String preparedSQL = "SELECT id, firstname, lastname" 
-                   + "email, password, sin"
+    public User getUser(String email) throws NotesDBException 
+    {
+        String preparedSQL = "SELECT id, firstname, lastname, " 
+                   + "email, password, sin "
                    + "FROM users WHERE email = ?";
-        try {
-        ConnectionPool cp= ConnectionPool.getInstance();
-        Connection connection = cp.getConnection();
-        PreparedStatement ps = connection.prepareStatement(preparedSQL);
+        try 
+        {
+            ConnectionPool cp= ConnectionPool.getInstance();
+            Connection connection = cp.getConnection();
+            PreparedStatement ps = connection.prepareStatement(preparedSQL);
             ps.setString(1, email);
             ResultSet user = ps.executeQuery();
             cp.freeConnection(connection);
             return (User)user;
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) 
+        {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -108,12 +142,13 @@ public class UserDB {
         ConnectionPool cp= ConnectionPool.getInstance();
         Connection connection = cp.getConnection();
         User user;
-        String searchById = "SELECT * FROM USERS"
+        String searchById = "SELECT * FROM USERS "
                 + "WHERE ID = ?";
         PreparedStatement ps = connection.prepareStatement(searchById);
         ps.setInt(1, id);
         ResultSet user1 = ps.executeQuery();
         user = (User) user1;
+        cp.freeConnection(connection);
         return user;
     }
    public int delete(User user) throws NotesDBException, SQLException {
@@ -124,6 +159,7 @@ public class UserDB {
         PreparedStatement ps = connection.prepareStatement(deleteQuery);
         ps.setInt(1, user.getId());
         int rowAffected = ps.executeUpdate();
+        cp.freeConnection(connection);
         return rowAffected;
     }
 }
