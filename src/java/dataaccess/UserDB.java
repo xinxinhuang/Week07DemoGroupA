@@ -23,6 +23,7 @@ public class UserDB {
                     "'" + user.getEmail()+ "', " +
                     "'" + user.getPassword() + "', " +
                     "'" + user.getSIN() + "')";
+
         Statement statement = connection.createStatement();
 
         int rowCount = statement.executeUpdate(query);
