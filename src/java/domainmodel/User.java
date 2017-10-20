@@ -8,6 +8,15 @@ public class User {
     private String password;
     private int SIN;
 
+    
+    
+    public User(String firstname, String lastname, String email, String password, int SIN){
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.SIN = SIN;   
+    }
     public void setId(int id) {
         this.id = id;
     }
