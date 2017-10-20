@@ -86,19 +86,23 @@ public class UserDB {
      * @throws NotesDBException throws when the SQL query is not executed 
      * successfully
      */
-    public User getUser(String email) throws NotesDBException {
+    public User getUser(String email) throws NotesDBException 
+    {
         String preparedSQL = "SELECT id, firstname, lastname" 
                    + "email, password, sin"
                    + "FROM users WHERE email = ?";
-        try {
-        ConnectionPool cp= ConnectionPool.getInstance();
-        Connection connection = cp.getConnection();
-        PreparedStatement ps = connection.prepareStatement(preparedSQL);
+        try 
+        {
+            ConnectionPool cp= ConnectionPool.getInstance();
+            Connection connection = cp.getConnection();
+            PreparedStatement ps = connection.prepareStatement(preparedSQL);
             ps.setString(1, email);
             ResultSet user = ps.executeQuery();
             cp.freeConnection(connection);
             return (User)user;
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) 
+        {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
