@@ -37,6 +37,10 @@ public class UserDB {
         return null;
     }
 
+    public User getUserById(int id) throws NotesDBException {
+        return null;
+    }
+    
     public int delete(User user) throws NotesDBException {
         return 0;
     }
