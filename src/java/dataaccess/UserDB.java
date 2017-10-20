@@ -13,15 +13,16 @@ import java.util.logging.Logger;
 public class UserDB {
 
     public int insert(User user) throws NotesDBException, SQLException {
-        ConnectionPool cp = ConnectionPool.getInstance();
-        Connection connection = cp.getConnection();
-        String query = "UPDATE Users SET "
-                + "id = '" + user.getId() + "', "
-                + "firstname = '" + user.getFirstname() + "', "
-                + "lastname = '" + user.getLastname() + "', "
-                + "email = '" + user.getEmail() + "', "
-                + "password = '" + user.getPassword() + "', "
-                + "SIN = '" + user.getSIN() + "', ";
+
+       ConnectionPool cp= ConnectionPool.getInstance();
+       Connection connection = cp.getConnection();        
+        String query = "INSERT INTO Users (id,firstname,lastname,email,password,SIN) " +
+                    "VALUES ('" + user.getId() + "', " +
+                    "'" + user.getFirstname() + "', " +
+                    "'" + user.getLastname() + "', " +
+                    "'" + user.getEmail()+ "', " +
+                    "'" + user.getPassword() + "', " +
+                    "'" + user.getSIN() + "')";
 
         Statement statement = connection.createStatement();
 
