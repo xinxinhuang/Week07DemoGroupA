@@ -3,6 +3,7 @@ package dataaccess;
 import domainmodel.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -57,7 +58,14 @@ public class UserDB {
         return null;
     }
     
-    public int delete(User user) throws NotesDBException {
-        return 0;
+    public int delete(User user) throws NotesDBException, SQLException {
+        String deleteQuery = "DELETE FROM USERS " 
+                               +  "WHERE ID = ?";
+        
+        PreparedStatement ps = connection.prepareStatement(deleteQuery);
+        
+        ps.setInt(1, user.getId());
+        int rowAffected = ps.executeUpdate();
+        return rowAffected;
     }
 }
